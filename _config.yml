@@ -1,34 +1,33 @@
-# Welcome to Jekyll!
+# Welcome to ikuler!
 #
 # This config file is meant for settings that affect your whole blog, values
 # which you are expected to set up once and rarely need to edit after that.
 # For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
+# 'ikuler serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: Needlessly complex
+title: 略知一二
 description: > # this means to ignore newlines until "baseurl:"
-  Why do it by hand if you can code it in just quadruple the time?
+  Le vent se lève ，il faut tenter de vivre。
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://mzucker.github.io" # the base hostname & protocol for your site
-twitter_username: matt_zucker
-github_username:  mzucker
+url: "https://ikuler.github.io" # the base hostname & protocol for your site
+# twitter_username: 
+github_username:  ikuler
 
 # Build settings
 markdown: kramdown
 
 # Google services
-google_analytics: UA-82495353-1
+#google_analytics: UA-82495353-1
 
 gems:
-  - jekyll-seo-tag
+  - ikuler-seo-tag
 
-twitter:
-  username: matt_zucker
+#twitter:
 
 logo: /images/nclogo.png
 
-author:
-  twitter: matt_zucker
+#author:
+
 
 future: true
