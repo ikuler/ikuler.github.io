@@ -42,7 +42,7 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll-compose
-  jekyll-seo-tag
+  ikuler-seo-tag
 
 BUNDLED WITH
    1.12.5
