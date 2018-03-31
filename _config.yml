@@ -1,1 +1,23 @@
 theme: jekyll-theme-tactile
+title: complex
+description: > # this means to ignore newlines until "baseurl:"
+  Why do it by hand if you can code it in just quadruple the time?
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://mzucker.github.io" # the base hostname & protocol for your site
+
+github_username:  ikuler
+
+# Build settings
+markdown: kramdown
+
+# Google services
+
+
+gems:
+  - ikuler-seo-tag
+
+logo: /images/nclogo.png
+
+author: lihua
+
+future: true
