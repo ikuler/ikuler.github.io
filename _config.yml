@@ -1,23 +1,34 @@
-theme: jekyll-theme-tactile
-title: complex
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: Needlessly complex
 description: > # this means to ignore newlines until "baseurl:"
   Why do it by hand if you can code it in just quadruple the time?
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://mzucker.github.io" # the base hostname & protocol for your site
-
-github_username:  ikuler
+twitter_username: matt_zucker
+github_username:  mzucker
 
 # Build settings
 markdown: kramdown
 
 # Google services
-
+google_analytics: UA-82495353-1
 
 gems:
-  - ikuler-seo-tag
+  - jekyll-seo-tag
+
+twitter:
+  username: matt_zucker
 
 logo: /images/nclogo.png
 
-author: lihua
+author:
+  twitter: matt_zucker
 
 future: true
