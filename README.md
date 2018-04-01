@@ -1,4 +1,4 @@
-# ikuler.github.io
+# mzucker.github.io
 Coding blog
 
-See <https://ikuler.github.io/>
+See <https://mzucker.github.io/>
