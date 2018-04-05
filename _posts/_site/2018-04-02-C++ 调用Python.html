@@ -1,0 +1,101 @@
+<p>使用 C++ 调用 Python 脚本，并实现各种类型参数的传递。</p>
+
+<h1 id="前言">前言</h1>
+
+<p>C++ 可以把 Python 当成文本形式的动态链接库，需要的时候可以改一改脚本，不需要编译。调Python 提供了丰富的 C API 函数，通过使用自带的API接口可以实现对 Python 脚本文件中的函数、类的访问以及调用。从而可以使得我们可以方便的使用 Python 代码快速得实现一些额外的需求。比如使用 TersonFlow 进行开发。</p>
+
+<p>本文主要介绍 C++ 对 Python 函数的调用，C++ 对 Python 类的调用以及 C++ 与 Python 之间数组的相互传递。</p>
+
+<h1 id="c-对-python-简单函数的调用">C++ 对 Python 简单函数的调用</h1>
+
+<p>通过调用 python 脚本中的函数，来实现一些简单的功能扩展。先编写一个 Python 脚本文件名为 pytest.py。在此之前需要安装 python 环境。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">Add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>  
+    <span class="k">print</span> <span class="s">"in python function add"</span>  
+    <span class="k">print</span> <span class="s">"a = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>  
+    <span class="k">print</span> <span class="s">"b = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>  
+    <span class="k">print</span> <span class="s">"ret = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span>  
+    <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
+
+</code></pre></div></div>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp"># include &lt;Python.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[]</span> <span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">// 在使用Python系统前，必须使用Py_Initialize</span>
+    <span class="n">Py_Initialize</span><span class="p">();</span>
+
+    <span class="c1">// 检查初始化是否成功</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">Py_IsInitialized</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 添加当前路径，进行初始化。它会载入Python的内建模块并添加系统路</span>
+    <span class="n">PyRun_SimpleString</span><span class="p">(</span> <span class="s">"import sys"</span> <span class="p">);</span>
+    <span class="n">PyRun_SimpleString</span><span class="p">(</span> <span class="s">"print '---import sys---'"</span> <span class="p">);</span>
+    <span class="n">PyRun_SimpleString</span><span class="p">(</span> <span class="s">"sys.path.append('./')"</span> <span class="p">);</span>    
+    
+    <span class="n">PyObject</span> <span class="o">*</span> <span class="n">pName</span>   <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span> <span class="n">pModule</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span> <span class="n">pDict</span>   <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span> <span class="n">pFunc</span>   <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span> <span class="n">pArgs</span>   <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="c1">// 载入名为pytest的脚本</span>
+    <span class="n">pName</span>   <span class="o">=</span> <span class="n">PyString_FromString</span><span class="p">(</span> <span class="s">"pytest"</span> <span class="p">);</span>
+    <span class="n">pModule</span> <span class="o">=</span> <span class="n">PyImport_Import</span><span class="p">(</span> <span class="n">pName</span><span class="p">)</span> <span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">pModule</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"can't find pytest.py"</span><span class="p">);</span>
+        <span class="n">getchar</span><span class="p">();</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">pDict</span> <span class="o">=</span> <span class="n">PyModule_GetDict</span><span class="p">(</span><span class="n">pModule</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">pDict</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// 找出函数名为add的函数</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"----------------------</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">pFunc</span> <span class="o">=</span> <span class="n">PyDict_GetItemString</span><span class="p">(</span> <span class="n">pDict</span><span class="p">,</span> <span class="s">"Add"</span> <span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">pFunc</span> <span class="o">||</span> <span class="o">!</span><span class="n">PyCallable_Check</span><span class="p">(</span> <span class="n">pFunc</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"can't find function [add]"</span><span class="p">);</span>
+        <span class="n">getchar</span><span class="p">();</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+     <span class="p">}</span>
+
+    <span class="c1">// 参数进栈</span>
+    <span class="o">*</span><span class="n">pArgs</span><span class="p">;</span>
+    <span class="n">pArgs</span> <span class="o">=</span> <span class="n">PyTuple_New</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+
+    <span class="c1">//  PyObject* Py_BuildValue(char *format, ...)</span>
+    <span class="c1">//  把C++的变量转换成一个Python对象。当需要从</span>
+    <span class="c1">//  C++传递变量到Python时，就会使用这个函数。此函数</span>
+    <span class="c1">//  有点类似C的printf，但格式不同。常用的格式有</span>
+    <span class="c1">//  s 表示字符串，</span>
+    <span class="c1">//  i 表示整型变量，</span>
+    <span class="c1">//  f 表示浮点数，</span>
+    <span class="c1">//  O 表示一个Python对象。</span>
+
+    <span class="n">PyTuple_SetItem</span><span class="p">(</span> <span class="n">pArgs</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Py_BuildValue</span><span class="p">(</span> <span class="s">"l"</span><span class="p">,</span> <span class="mi">3</span> <span class="p">)</span> <span class="p">);</span>
+    <span class="n">PyTuple_SetItem</span><span class="p">(</span> <span class="n">pArgs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Py_BuildValue</span><span class="p">(</span> <span class="s">"l"</span><span class="p">,</span> <span class="mi">4</span> <span class="p">)</span> <span class="p">);</span>
+
+    <span class="c1">// 调用Python函数</span>
+    <span class="n">PyObject</span> <span class="o">*</span> <span class="n">pyRet</span> <span class="o">=</span> <span class="n">PyObject_CallObject</span><span class="p">(</span> <span class="n">pFunc</span><span class="p">,</span> <span class="n">pArgs</span> <span class="p">);</span>
+
+    <span class="c1">// 也可以通过下面这种形式直接调用</span>
+    <span class="c1">//PyObject * pyRet = PyObject_CallMethod( pyIns, "Add", "ii", 5, 6 ); // 调用tester.add方法，传入2个int型参数</span>
+
+    <span class="c1">// 获取返回值</span>
+    <span class="kt">int</span> <span class="n">reval</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">retok</span> <span class="o">=</span> <span class="n">PyArg_Parse</span><span class="p">(</span> <span class="n">pyRet</span><span class="p">,</span> <span class="s">"i"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reval</span> <span class="p">);</span> <span class="c1">// 从返回值从取出int型返回值</span>
+    <span class="n">printf</span><span class="p">(</span> <span class="s">"返回结果: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">reval</span> <span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+</code></pre></div></div>
+

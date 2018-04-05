@@ -1,0 +1,58 @@
+<p>使用GitHub搭建一个个性化博客</p>
+
+<h1 id="动机">动机</h1>
+
+<p>在网络上看见一篇博客<a href="https://mzucker.github.io/2016/09/20/noteshrink.html">Compressing and enhancing hand-written notes</a>一看域名github.io的，心生好奇，就想搭建了一个类似的系统。以下是搭建过程中的一些步骤。</p>
+
+<h1 id="工具">工具</h1>
+
+<p>整个搭建过程中将会使用的以下工具：</p>
+
+<ol>
+  <li>
+    <p>GitHub 代码托管工具，用来存储代码以及免费域名。</p>
+  </li>
+  <li>
+    <p>Git：版本管理工具，用来同步本地与GitHub的文件，也可以使用GitHub客户端来替代。</p>
+  </li>
+  <li>
+    <p>vim：markdown文件编辑工具，可以使用其它文本编辑工具替代。</p>
+  </li>
+</ol>
+
+<p>开发人员对于以上工具可能比较熟悉，非开发人员我建议使用其它工具替代，毕竟使用markdown编辑文档也是一件麻烦的使用。</p>
+
+<h1 id="步骤">步骤</h1>
+<ol>
+  <li>
+    <p><strong>注册GitHub帐号</strong> 不用多说使用别人的东西肯定需要注册一个自己的帐号网址如下<a href="https://github.com">https://github.com</a>，GitHub提供免费和付费服务，其中免费是公开的即别人可以任意下载、复制你上传的信息。这里使用的是公开帐号，如果不想公开太多可以使用私密帐号需要缴费。支持一下别人的生意。</p>
+  </li>
+  <li>
+    <p><strong>在GitHub上创建一个新的仓库</strong> 仓库是用来保存博客的地方。
+   <img src="/images/first_blog/new_repository.png" alt="step 2" class="center-image" /></p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* 注意：仓库的名称不能随便起，这样会导致GitHub混乱，起名应该使用“用户名.github.io”
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>设置仓库</strong> 仓库创建好以后可以通过设置选项来配置博客的一些基本属性。这里我没有配置博客，只是把别人的代码copy下来了然后上传至GitHub上然后修改了别人的代码，如果你们喜欢这套配置也可以直接通过前面博客地址或者我这里的博客地址下载代码，然后修改一些配置即可。或者使用GitHub生成好的配置。</p>
+  </li>
+  <li>
+    <p><strong>Git文件管理</strong> 这里通过Git的文件/代码进行管理，主要使用的命令如下：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone path （“把项目从GitHub上下载下来，这里可以指定一个文件夹名，不指定使用默认名称”）
+     
+git add . （“添加目录，这里‘.’代表当前目录”）
+
+git commit -m "描述" （“提交后面是注释”）
+
+git pull path （“代码同步到本地，和clone的path是同一个”）
+
+git push path  (“代码同步到服务器，和pull的path是同一个”)
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>查看博客</strong> 打开浏览器，输入 name.io 即可打开博客。</p>
+  </li>
+</ol>
+
