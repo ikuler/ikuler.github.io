@@ -6,7 +6,7 @@ title: Python 访问 HBase
 使用 Python 通过 phoenixdb 访问 HBase，一个简单的 phoenixdb 快速入门指南。
 
 # 前言
-======
+---
 
 Python 访问 HBase 可以通过如下两种方式访问。
 1. HBase 数据库，通过 happybase 可以直接访问 Habse，通过 phoenix 可以使用类 SQL 形式访问 HBase。
